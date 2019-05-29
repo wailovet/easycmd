@@ -10,6 +10,7 @@ type Pty struct {
 	cmd       *exec.Cmd
 	ptyFile   *os.File
 	ptyWriter func(p []byte) (int, error)
+	ptyEnd    func()
 	Buffer    *bytes.Buffer
 }
 
@@ -25,6 +26,10 @@ func (that *ptyWriter) Write(p []byte) (int, error) {
 func (that *Pty) Write(p []byte) (int, error) {
 	n, err := that.ptyWriter(p)
 	return n, err
+}
+
+func (that *Pty) SetEventEnd(c func()) {
+	that.ptyEnd = c
 }
 
 func NewPty(name string, arg ...string) *Pty {

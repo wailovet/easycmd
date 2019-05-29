@@ -38,5 +38,12 @@ func (that *Pty) Start(callback func(data []byte)) error {
 		return err
 	}
 
+	go func() {
+		that.cmd.Wait()
+		if that.ptyEnd != nil {
+			that.ptyEnd()
+		}
+	}()
+
 	return nil
 }

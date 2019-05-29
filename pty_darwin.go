@@ -23,6 +23,11 @@ func (that *Pty) Start(callback func(data []byte)) error {
 				callback(p)
 			},
 		}, that.ptyFile)
+
+		if that.ptyEnd != nil {
+			that.ptyEnd()
+		}
+		that.ptyFile.Close()
 	}()
 
 	return nil
