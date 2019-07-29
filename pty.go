@@ -12,6 +12,7 @@ type Pty struct {
 	ptyWriter func(p []byte) (int, error)
 	ptyEnd    func()
 	Buffer    *bytes.Buffer
+	IsWinUtf8 bool
 }
 
 type ptyWriter struct {

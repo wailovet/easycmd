@@ -3,11 +3,16 @@ package easycmd
 import "github.com/axgle/mahonia"
 
 type WinWriter struct {
-	callback func(data []byte)
+	callback  func(data []byte)
+	IsWinUtf8 bool
 }
 
 func (that *WinWriter) Write(p []byte) (n int, err error) {
-	that.callback([]byte(that.ConvertToString(string(p), "gbk", "utf-8")))
+	if !that.IsWinUtf8 {
+		that.callback([]byte(that.ConvertToString(string(p), "gbk", "utf-8")))
+	} else {
+		that.callback(p)
+	}
 	return len(p), nil
 }
 
@@ -26,7 +31,8 @@ func (that *Pty) Start(callback func(data []byte)) error {
 	stdInIn, _ := that.cmd.StdinPipe()
 
 	var out = &WinWriter{
-		callback: callback,
+		callback:  callback,
+		IsWinUtf8: that.IsWinUtf8,
 	}
 	that.cmd.Stderr = out
 	that.cmd.Stdout = out
