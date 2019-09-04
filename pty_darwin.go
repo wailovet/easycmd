@@ -17,6 +17,18 @@ func (that *Pty) Start(callback func(data []byte)) error {
 	}
 
 	go func() {
+		defer func() {
+			errs := recover()
+			if errs != nil {
+				if that.ptyError != nil {
+					that.ptyError(errs)
+				}
+			}
+			if that.ptyEnd != nil {
+				that.ptyEnd()
+			}
+		}()
+
 		_, _ = io.Copy(&ptyWriter{
 			callback: func(p []byte) {
 				that.Buffer.Write(p)
@@ -24,9 +36,6 @@ func (that *Pty) Start(callback func(data []byte)) error {
 			},
 		}, that.ptyFile)
 
-		if that.ptyEnd != nil {
-			that.ptyEnd()
-		}
 		that.ptyFile.Close()
 	}()
 

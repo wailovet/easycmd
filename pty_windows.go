@@ -45,10 +45,19 @@ func (that *Pty) Start(callback func(data []byte)) error {
 	}
 
 	go func() {
+		defer func() {
+			errs := recover()
+			if errs != nil {
+				if that.ptyError != nil {
+					that.ptyError(errs)
+				}
+			}
+			if that.ptyEnd != nil {
+				that.ptyEnd()
+			}
+		}()
+
 		that.cmd.Wait()
-		if that.ptyEnd != nil {
-			that.ptyEnd()
-		}
 	}()
 
 	return nil

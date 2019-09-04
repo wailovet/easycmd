@@ -11,6 +11,7 @@ type Pty struct {
 	ptyFile   *os.File
 	ptyWriter func(p []byte) (int, error)
 	ptyEnd    func()
+	ptyError  func(err interface{})
 	Buffer    *bytes.Buffer
 	IsWinUtf8 bool
 }
@@ -31,6 +32,10 @@ func (that *Pty) Write(p []byte) (int, error) {
 
 func (that *Pty) SetEventEnd(c func()) {
 	that.ptyEnd = c
+}
+
+func (that *Pty) SetEventError(c func(err interface{})) {
+	that.ptyError = c
 }
 
 func NewPty(name string, arg ...string) *Pty {
