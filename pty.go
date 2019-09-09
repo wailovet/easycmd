@@ -34,6 +34,10 @@ func (that *Pty) SetEventEnd(c func()) {
 	that.ptyEnd = c
 }
 
+func (that *Pty) Close(c func()) {
+	that.cmd.Process.Kill()
+}
+
 func (that *Pty) SetEventError(c func(err interface{})) {
 	that.ptyError = c
 }
