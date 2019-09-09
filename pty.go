@@ -34,7 +34,7 @@ func (that *Pty) SetEventEnd(c func()) {
 	that.ptyEnd = c
 }
 
-func (that *Pty) Close(c func()) {
+func (that *Pty) Close() {
 	that.cmd.Process.Kill()
 }
 
