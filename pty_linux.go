@@ -1,7 +1,7 @@
 package easycmd
 
 import (
-	"github.com/kr/pty"
+	"github.com/creack/pty"
 	"io"
 )
 
@@ -36,8 +36,11 @@ func (that *Pty) Start(callback func(data []byte)) error {
 				callback(p)
 			},
 		}, that.ptyFile)
-
+		//log.Println("that.cmd.Process.Wait")
+		that.cmd.Process.Wait()
+		//log.Println("that.cmd.Process.Wait.End")
 		that.ptyFile.Close()
+		//log.Println("pty.End")
 	}()
 
 	return nil
