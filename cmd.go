@@ -47,9 +47,8 @@ func (that *Cmd) Start(callback func(data []byte)) error {
 
 	stdInIn, _ := that.cmd.StdinPipe()
 
-	var out = &WinWriter{
-		callback:  callback,
-		IsWinUtf8: that.IsWinUtf8,
+	var out = &cmdWriter{
+		callback: callback,
 	}
 	that.cmd.Stderr = out
 	that.cmd.Stdout = out
