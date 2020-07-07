@@ -25,6 +25,10 @@ func (that *cmdWriter) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
+func (that *Cmd) GetCmd() *exec.Cmd {
+	return that.cmd
+}
+
 func (that *Cmd) Write(p []byte) (int, error) {
 	n, err := that.cmdWriter(p)
 	return n, err
